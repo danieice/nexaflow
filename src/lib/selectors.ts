@@ -68,3 +68,25 @@ export function queryProjects(
     return a.deadline.localeCompare(b.deadline);
   });
 }
+
+export const TASK_FILTERS = ["all", "overdue", "week", "done"] as const;
+export type TaskFilter = (typeof TASK_FILTERS)[number];
+
+export function isTaskFilter(value: unknown): value is TaskFilter {
+  return typeof value === "string" && (TASK_FILTERS as readonly string[]).includes(value);
+}
+
+export function filterTasks(tasks: Task[], filter: TaskFilter, projectId: string) {
+  return tasks
+    .filter((task) => {
+      if (projectId !== "all" && task.projectId !== projectId) return false;
+      if (filter === "overdue") return isOverdue(task);
+      if (filter === "done") return task.status === "Done";
+      if (filter === "week") {
+        const days = daysUntil(task.deadline);
+        return task.status !== "Done" && days >= 0 && days <= 7;
+      }
+      return true;
+    })
+    .sort((a, b) => a.deadline.localeCompare(b.deadline));
+}

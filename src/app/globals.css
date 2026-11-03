@@ -41,3 +41,18 @@ body {
     right: 1.5rem;
   }
 }
+
+dialog[open] {
+  animation: rise-in 180ms ease-out;
+}
+
+.toast {
+  animation: rise-in 200ms ease-out;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}

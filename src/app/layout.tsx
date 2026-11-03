@@ -5,6 +5,7 @@ import { WorkspaceProvider } from "@/store/workspace";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
+import { ToastProvider } from "@/components/ui/toast";
 
 const display = Instrument_Serif({
   subsets: ["latin"],
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
       <body>
   <WorkspaceProvider>
+    <ToastProvider>
     <a
       href="#main"
       className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-card"
@@ -48,6 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </main>
     </div>
     <MobileNav />
+  </ToastProvider>
   </WorkspaceProvider>
 </body>
     </html>

@@ -33,3 +33,11 @@ export type Task = {
   deadline: string;
   projectId: string;
 };
+
+export function isProjectStatus(value: unknown): value is ProjectStatus {
+  return typeof value === "string" && (PROJECT_STATUSES as readonly string[]).includes(value);
+}
+
+export function isTaskStatus(value: unknown): value is TaskStatus {
+  return typeof value === "string" && (TASK_STATUSES as readonly string[]).includes(value);
+}
