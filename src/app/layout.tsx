@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Mono, Instrument_Serif, Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
+import { WorkspaceProvider } from "@/store/workspace";
 
 const display = Instrument_Serif({
   subsets: ["latin"],
@@ -28,7 +29,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
-      <body>{children}</body>
+      <body>
+  <WorkspaceProvider>{children}</WorkspaceProvider>
+</body>
     </html>
   );
 }
