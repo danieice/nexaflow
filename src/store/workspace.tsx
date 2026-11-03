@@ -118,7 +118,11 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     [state, addProject, setTaskStatus, resetDemo]
   );
 
-  return <WorkspaceContext.Provider value={value}>{children}</WorkspaceContext.Provider>;
+  return (
+  <WorkspaceContext.Provider value={value}>
+    {loaded ? children : null}
+  </WorkspaceContext.Provider>
+);
 }
 
 export function useWorkspace() {
