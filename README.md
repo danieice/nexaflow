@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NexaFlow
 
-## Getting Started
+A frontend-only project management dashboard built for the NexaFlow technical challenge.
+All data is simulated locally; there is no backend, API or database.
 
-First, run the development server:
+## Run it
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Requires Node 18.18 or newer and pnpm.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    pnpm install
+    pnpm dev
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open http://localhost:3000. Data is saved in localStorage; use "Reset demo data" in the profile menu to start over.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Design direction
 
-## Learn More
+A "studio paper" look: warm paper background, ink text, a serif display face (Instrument Serif)
+with a mono face (IBM Plex Mono) for numbers and dates. Each project gets a colored paper tab as
+its visual identity. The header is a frosted glass pill; on mobile the same pill becomes the bottom
+navigation, so one motif carries across screen sizes.
 
-To learn more about Next.js, take a look at the following resources:
+## Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Overview: welcome summary, stats, overall progress ring, per-project progress bars,
+  upcoming tasks and recent projects. Stat cards link to the matching filtered list.
+- Projects: search (name, description, lead), status filter and sort by deadline, newest or
+  progress, all combinable. Clear filters at any time.
+- Tasks: grouped by status, filter by overdue, due this week or done, and by project.
+  Status changes move the task and update every stat.
+- New project modal with validation, feedback toast and highlight of the new card.
+- Notifications list overdue and due-today tasks.
+- Empty states, responsive layout, keyboard support and visible focus.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Architecture
 
-## Deploy on Vercel
+    src/
+      app/            routes: overview, projects, tasks (App Router)
+      components/
+        layout/       sidebar, glass header, mobile nav
+        dashboard/    welcome, stats, progress, upcoming, recent
+        projects/     card, toolbar, new project form and modal
+        tasks/        task item, status select, tasks view
+        ui/           dialog, button, field, toast, empty state, progress bar and ring
+      data/seed.ts    sample team, projects and tasks
+      lib/            types, date helpers, selectors (all calculations)
+      store/          React context + useReducer, persisted to localStorage
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Single source of truth:** state lives in one reducer. Every stat, progress value and
+  "overdue" flag is calculated from the data in `lib/selectors.ts`, never stored, so the
+  numbers always agree.
+- **Project progress** is completed tasks divided by total tasks; a Completed project is 100%.
+- **Seed dates are relative to today,** so upcoming and overdue always make sense.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Libraries
+
+- **lucide-react**: consistent icon set, tree-shaken so only used icons ship.
+- **clsx**: small helper for conditional class names.
+- No UI or chart library. The modal is the native `<dialog>` element, menus use the native
+  Popover API, and charts are hand-built SVG.
+
+## AI use
+
+I used Claude (Anthropic) as a guide during the challenge for planning, explanations and
+code suggestions. I typed and tested the code myself and can explain and modify every part of it.
