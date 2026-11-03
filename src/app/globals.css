@@ -28,3 +28,16 @@ body {
   background: var(--color-accent);
   color: var(--color-card);
 }
+
+.menu-popover {
+  inset: auto;
+  top: 4.75rem;
+  right: 0.75rem;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .menu-popover {
+    right: 1.5rem;
+  }
+}
